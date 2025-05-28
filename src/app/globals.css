@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #0B132B;
+  --primary-dark: #070D1F;
+  --primary-light: #0F1A3D;
+  --secondary: #F9F9F9;
+  --secondary-light: #FFFFFF;
+  --secondary-dark: #F0F0F0;
+  --accent: #D7263D;
+  --accent-dark: #B31E32;
+  --accent-light: #E83E55;
+}
+
+@layer base {
+  body {
+    @apply bg-secondary text-primary;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-primary-dark;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-lg transition-colors duration-300;
+    background-color: var(--accent);
+    color: var(--secondary-light);
+  }
+  .btn-primary:hover {
+    background-color: var(--accent-dark);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-lg transition-colors duration-300;
+    background-color: var(--primary);
+    color: var(--secondary-light);
+  }
+  .btn-secondary:hover {
+    background-color: var(--primary-dark);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, var(--accent), var(--accent-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(11, 19, 43, 0.5);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(11, 19, 43, 0.7);
+}
+
+/* Selection Color */
+::selection {
+  background-color: rgba(215, 38, 61, 0.2);
+  color: var(--primary);
+} 
