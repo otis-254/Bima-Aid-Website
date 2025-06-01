@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        raleway: ['var(--font-raleway)', 'sans-serif'],
+        poppins: ['var(--font-poppins)'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1.5' }],
@@ -32,24 +32,24 @@ const config: Config = {
         widest: '0.05em',
       },
       colors: {
-        primary: '#1a365d',
+        primary: '#1E3A8A',
         'primary-dark': '#0f2444',
         'primary-light': '#2a4a7c',
-        secondary: '#f8fafc',
+        secondary: '#F8FAFC',
         'secondary-light': '#ffffff',
         'secondary-dark': '#e2e8f0',
         accent: '#38b2ac',
         'accent-dark': '#2c9a94',
-        'accent-teal': '#38b2ac',
+        'accent-teal': '#0D9488',
       },
       container: {
         center: true,
-        padding: '1rem',
-        screens: {
-          sm: '640px',
-          md: '768px',
-          lg: '1024px',
-          xl: '1280px',
+        padding: {
+          DEFAULT: '1rem',
+          sm: '2rem',
+          lg: '4rem',
+          xl: '5rem',
+          '2xl': '6rem',
         },
       },
       keyframes: {

@@ -1,0 +1,85 @@
+/* Add the following CSS rules */
+
+.animated-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-border::before, .animated-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+}
+
+.animated-border::before {
+  border-top-color: white; /* Adjust color as needed */
+  border-right-color: white;
+  animation: border-animate-before 2s linear infinite;
+}
+
+.animated-border::after {
+  border-bottom-color: white; /* Adjust color as needed */
+  border-left-color: white;
+  animation: border-animate-after 2s linear infinite;
+}
+
+@keyframes border-animate-before {
+  0% {
+    width: 0; height: 0;
+    border-top-color: transparent;
+    border-right-color: transparent;
+  }
+  25% {
+    width: 100%; height: 0;
+    border-top-color: white;
+    border-right-color: transparent;
+  }
+  50% {
+    width: 100%; height: 100%;
+    border-top-color: white;
+    border-right-color: white;
+  }
+  75% {
+    width: 100%; height: 100%;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  100% {
+    width: 100%; height: 100%;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+@keyframes border-animate-after {
+  0% {
+    width: 100%; height: 100%;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  25% {
+    width: 100%; height: 100%;
+    border-bottom-color: white;
+    border-left-color: transparent;
+  }
+  50% {
+    width: 0; height: 100%;
+    border-bottom-color: white;
+    border-left-color: white;
+  }
+  75% {
+    width: 0; height: 0;
+    border-top-color: transparent;
+    border-right-color: transparent;
+  }
+  100% {
+    width: 0; height: 0;
+    border-top-color: transparent;
+    border-right-color: transparent;
+  }
+} 

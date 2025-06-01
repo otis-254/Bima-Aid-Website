@@ -6,14 +6,21 @@ import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
 
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'Success Stories', href: '/success-stories' },
+  { name: 'Case Digest', href: '/case-digest' },
+  { name: 'Contact', href: '/contact' },
+]
+
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      setIsScrolled(window.scrollY > 0)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -27,140 +34,76 @@ export function Navbar() {
   }
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white'
-    }`}>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
       <div className="container-custom">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="relative z-10">
+          <Link href="/" className="flex items-center space-x-2">
             <Image
-              src="/images/logo.png"
-              alt="BIMA-AID"
-              width={200}
-              height={60}
-              className="h-16 w-auto"
+              src="/images/Logo.jpg"
+              alt="BIMA-AID Logo"
+              width={40}
+              height={40}
+              className="w-auto h-10"
             />
+            {/* <span className={`text-xl font-bold text-gray-800`}>
+              BIMA-AID
+            </span> */}
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="relative text-primary group hover:text-accent-teal transition-colors duration-300">
-              <span className="relative z-10">Home</span>
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-                isActive('/') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
-            <Link href="/about" className="relative text-primary group hover:text-accent-teal transition-colors duration-300">
-              <span className="relative z-10">About</span>
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-                isActive('/about') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
-            <Link href="/success-stories" className="relative text-primary group hover:text-accent-teal transition-colors duration-300">
-              <span className="relative z-10">Success Stories</span>
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-                isActive('/success-stories') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
-            <Link href="/contact" className="relative text-primary group hover:text-accent-teal transition-colors duration-300">
-              <span className="relative z-10">Contact</span>
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-                isActive('/contact') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
-            <Link href="/case-digest" className="relative text-primary group hover:text-accent-teal transition-colors duration-300">
-              <span className="relative z-10">Case Digest</span>
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-                isActive('/case-digest') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
-            <Link 
-              href="/contact" 
-              className="px-6 py-2 bg-accent-teal text-secondary-light rounded-lg hover:bg-accent-dark transition-colors duration-300"
-            >
-              Get Started
-            </Link>
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`text-sm font-medium text-gray-800 transition-all duration-300 pb-1 border-b-2 ${
+                  isActive(item.href)
+                    ? 'border-accent-teal'
+                    : 'border-transparent hover:border-primary/50'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative z-10 p-2 text-primary hover:text-accent transition-colors duration-300"
+            className="md:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
           >
-            {isOpen ? (
-              <XMarkIcon className="h-6 w-6" />
+            {isMobileMenuOpen ? (
+              <XMarkIcon className="h-6 w-6 text-gray-600" />
             ) : (
-              <Bars3Icon className="h-6 w-6" />
+              <Bars3Icon className={`h-6 w-6 text-gray-600`} />
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <div className={`md:hidden fixed inset-0 bg-white/95 backdrop-blur-sm transition-transform duration-300 ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
-        <div className="container-custom h-full flex flex-col justify-center items-center space-y-8">
-          <Link 
-            href="/" 
-            className="relative text-2xl text-primary group hover:text-accent-teal transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="relative z-10">Home</span>
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-              isActive('/') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </Link>
-          <Link 
-            href="/about" 
-            className="relative text-2xl text-primary group hover:text-accent-teal transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="relative z-10">About</span>
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-              isActive('/about') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </Link>
-          <Link 
-            href="/success-stories" 
-            className="relative text-2xl text-primary group hover:text-accent-teal transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="relative z-10">Success Stories</span>
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-              isActive('/success-stories') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </Link>
-          <Link 
-            href="/contact" 
-            className="relative text-2xl text-primary group hover:text-accent-teal transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="relative z-10">Contact</span>
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-              isActive('/contact') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </Link>
-          <Link 
-            href="/case-digest" 
-            className="relative text-2xl text-primary group hover:text-accent-teal transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="relative z-10">Case Digest</span>
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent-teal transition-all duration-300 ${
-              isActive('/case-digest') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </Link>
-          <Link 
-            href="/contact" 
-            className="px-8 py-3 bg-accent-teal text-secondary-light rounded-lg hover:bg-accent-dark transition-colors duration-300"
-            onClick={() => setIsOpen(false)}
-          >
-            Get Started
-          </Link>
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-lg">
+          <div className="container-custom py-4">
+            <div className="flex flex-col space-y-4">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-gray-800 hover:text-primary font-medium ${
+                    isActive(item.href) ? 'font-bold' : ''
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      )}
+    </header>
   )
 } 

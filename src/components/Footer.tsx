@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const footerNavigation = {
   main: [
-    { name: 'About Us', href: '/about' },
+    { name: 'Home', href: '/about' },
     { name: 'Success Stories', href: '/success-stories' },
     { name: 'Case Digest', href: '/case-digest' },
     { name: 'Contact', href: '/contact' },
@@ -48,14 +49,23 @@ const footerNavigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-dark text-white">
+    <footer className="bg-primary text-white">
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
+          {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold mb-4">BIMA-AID</h3>
+            <div className="flex items-center space-x-2 mb-4">
+              <Image
+                src="/images/Logo.jpg"
+                alt="BIMA-AID Logo"
+                width={40}
+                height={40}
+                className="w-auto h-10"
+              />
+              {/* <span className="text-xl font-bold">BIMA-AID</span> */}
+            </div>
             <p className="text-gray-300 mb-4">
-              Protecting policyholders and enforcing accountability in the insurance industry.
+              Expert assistance for policyholders facing unfair claim rejections. We help you win against insurance companies.
             </p>
             <div className="flex space-x-6">
               {footerNavigation.social.map((item) => (
@@ -73,7 +83,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-2">
               {footerNavigation.main.map((item) => (
                 <li key={item.name}>
@@ -90,16 +100,18 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Contact Info</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Email: info@bima-aid.com</li>
+              <li>288 Milimani</li>
               <li>WhatsApp: +254 111 689 543</li>
-              <li>Address: 288 Milimani</li>
+              <li>Email: info@bima-aid.com</li>
+              <li>Location: Nairobi, Kenya</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
           <p>&copy; {new Date().getFullYear()} BIMA-AID. All rights reserved.</p>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { AnimatedSection } from '@/components/AnimatedSection'
 import '@/styles/animations.css'
-import { XCircleIcon, QuestionMarkCircleIcon, HandRaisedIcon, BuildingOfficeIcon, UserGroupIcon, ShieldExclamationIcon, CheckCircleIcon, UserIcon } from '@heroicons/react/24/outline'
+import { XCircleIcon, QuestionMarkCircleIcon, HandRaisedIcon, BuildingOfficeIcon, UserGroupIcon, ShieldExclamationIcon, CheckCircleIcon, UserIcon, TrophyIcon } from '@heroicons/react/24/outline'
 
 const values = [
   {
@@ -61,7 +61,7 @@ const processSteps = [
 
 export default function AboutPage() {
   return (
-    <main className="pt-20">
+    <main className="pt-20 bg-gray-100">
       {/* Hero Section */}
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
@@ -84,7 +84,7 @@ export default function AboutPage() {
         <div className="container-custom relative z-10 text-center text-white">
           <AnimatedSection>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-              About BIMA-AID
+              Welcome to BIMA-AID
             </h1>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
@@ -400,6 +400,77 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Our Track Record Section */}
+      <section className="relative py-20 overflow-hidden">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/video.mp4" type="video/mp4" /> {/* Replace with your video path */}
+          Your browser does not support the video tag.
+        </video>
+        {/* Dark Overlay for text visibility */}
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+
+        <div className="container-custom relative z-10 text-center">
+          <AnimatedSection>
+            <div className="flex items-center justify-center space-x-4 mb-12">
+              <div className="h-[3px] w-24 bg-primary/20"></div> {/* Adjusted line thickness */}
+              <h2 className="text-4xl md:text-5xl font-bold text-white">Our Track Record</h2>
+              <div className="h-[3px] w-24 bg-primary/20"></div> {/* Adjusted line thickness */}
+            </div>
+
+            {/* Testimonial/Statement */}
+            <p className="text-xl md:text-2xl font-semibold text-white mb-12 max-w-3xl mx-auto">
+              We have won every single case we&apos;ve taken on, a testament to our unwavering dedication and expertise in navigating the complexities of insurance law.;
+            </p>
+
+            {/* Icon and Badge */}
+            <div className="flex justify-center items-center space-x-6 mb-16">
+               {/* Success Rate Badge */}
+               <div className="bg-accent-teal text-white px-6 py-3 rounded-full text-xl font-bold shadow-lg relative overflow-hidden animated-border">
+                  <span className="relative z-10">100% Success Rate</span>
+               </div>
+            </div>
+
+            {/* Feature Cards - Adjusted for better visibility on dark background */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Card 1 */}
+              <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center text-center border border-transparent hover:border-primary transition duration-300"> {/* Changed card background to white */}
+                 <span className="text-4xl mb-4">🧠</span> {/* Emoji Icon */}
+                 <h3 className="text-xl font-bold text-primary mb-2">Smart Strategy</h3>
+                 <p className="text-gray-700">
+                   Analyzing every angle to build the strongest case possible.
+                 </p>
+              </div>
+              {/* Card 2 */}
+              <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center text-center border border-transparent hover:border-primary transition duration-300"> {/* Changed card background to white */}
+                 <span className="text-4xl mb-4">💪</span> {/* Emoji Icon */}
+                 <h3 className="text-xl font-bold text-primary mb-2">Relentless Pursuit</h3>
+                 <p className="text-gray-700">
+                   Fighting tirelessly until justice is served.
+                 </p>
+              </div>
+              {/* Card 3 */}
+              <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center text-center border border-transparent hover:border-primary transition duration-300"> {/* Changed card background to white */}
+                 <span className="text-4xl mb-4">🤝</span> {/* Emoji Icon */}
+                 <h3 className="text-xl font-bold text-primary mb-2">On Your Side</h3>
+                 <p className="text-gray-700">
+                   Your trusted partner through every step of the process.
+                 </p>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      {/* ... existing code ... */}
     </main>
   )
 } 

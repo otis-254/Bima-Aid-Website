@@ -6,39 +6,29 @@ import { AnimatedSection } from '@/components/AnimatedSection'
 import { BackgroundAnimation } from '@/components/BackgroundAnimation'
 import '@/styles/animations.css'
 
-interface CaseStudy {
-  id: number
-  title: string
-  category: string
-  amount: string
-  description: string
-  image: string
-  details: string
-}
-
-const caseStudies: CaseStudy[] = [
+const caseDigests = [
   {
-    id: 1,
-    title: 'Medical Insurance Claim Victory',
-    category: 'Health Insurance',
-    amount: 'Full Settlement',
-    description: 'Successfully overturned a rejected medical claim for a Life Insurance.',
-    image: '/images/life-case 2.png',
-    details: '/case-digest/medical-insurance-claim-2024',
+    title: "Medical Insurance Claim Victory",
+    summary: "Successfully overturned a rejected medical claim for a Life Assurance.",
+    category: "Health Insurance",
+    amount: "Full Settlement",
+    date: "22nd May 2025",
+    ref: "Ref: MILIMANI SCCCOMM/E9846/2023",
+    image: "/images/001.jpg", // Placeholder image path based on image content
+    link: "/case-digest/details/medical-insurance-claim"
   }
 ]
 
-export default function CaseDigestPage() {
+export default function CaseDigest() {
   return (
-    <main className="pt-20">
-      <BackgroundAnimation />
+    <main>
       {/* Hero Section */}
-      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative py-32 bg-gradient-to-br from-primary/5 via-accent-teal/5 to-primary/5">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/life-case 2.png"
-            alt="Insurance Justice - BIMA-AID"
+            alt="Case Digest"
             fill
             className="object-cover brightness-50"
             priority
@@ -47,104 +37,62 @@ export default function CaseDigestPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
         </div>
 
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-teal via-white to-accent-teal" />
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent-teal via-white to-accent-teal" />
-
-        <div className="container-custom relative z-10 text-center text-white">
+        <div className="container-custom relative z-10">
           <AnimatedSection>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-              Case Digest
-            </h1>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto font-semibold text-white">
-              Landmark Insurance Cases That Shape Policyholder Rights
-            </p>
-          </AnimatedSection>
-          <AnimatedSection delay={0.3}>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto mt-4 text-gray-200">
-              Explore our comprehensive collection of insurance cases that have set precedents and protected policyholder rights in Kenya.
-            </p>
-          </AnimatedSection>
-          <AnimatedSection delay={0.4}>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link 
-                href="#recent-cases" 
-                className="btn-primary bg-white text-primary hover:bg-gray-100"
-              >
-                View Recent Cases
-              </Link>
-              <Link 
-                href="/contact" 
-                className="btn-outline text-white border-white hover:bg-white/10"
-              >
-                Need Legal Help?
-              </Link>
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Case Digest
+              </h1>
+              <h2 className="text-xl md:text-2xl font-semibold text-white/90 mb-4">
+                Landmark Insurance Cases That Shape Policyholder Rights
+              </h2>
+              <p className="text-lg text-white/80">
+                Explore our comprehensive collection of insurance cases that have set precedents and protected policyholder rights in Kenya.
+              </p>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Search and Filter Section */}
-      <section className="section-padding bg-white">
+      {/* Case Digest Grid */}
+      <section className="py-20 bg-white">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-4 mb-8">
-              <input
-                type="text"
-                placeholder="Search cases..."
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-              <select className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent">
-                <option value="">All Categories</option>
-                <option value="health">Health Insurance</option>
-                <option value="property">Property Insurance</option>
-                <option value="life">Life Insurance</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </section>
+          <div className="grid grid-cols-1 gap-12">
+            {caseDigests.map((digest, index) => (
+              <AnimatedSection key={index} delay={index * 0.1}>
+                <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                  {digest.image && (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={digest.image}
+                        alt={digest.title}
+                        fill
+                        className="object-cover"
+                      />
+                      {digest.category && (
+                        <span className="absolute bottom-4 left-4 px-3 py-1 bg-teal-600 text-white rounded-full text-sm font-medium z-10">
+                          {digest.category}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <div className="p-8">
+                    <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
+                      {digest.date && <span>{digest.date}</span>}
+                      {digest.ref && <span>{digest.ref}</span>}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{digest.title}</h3>
+                    <p className="text-gray-600 mb-4">{digest.summary || ''}</p>
 
-      {/* Case Studies Section */}
-      <section className="section-padding bg-gray-50">
-        <div className="container-custom">
-          <div className="grid md:grid-cols-3 gap-8">
-            {caseStudies.map((caseStudy, index) => (
-              <AnimatedSection
-                key={caseStudy.id}
-                delay={index * 0.1}
-                className="bg-white rounded-lg shadow-lg overflow-hidden group"
-              >
-                <div className="relative h-48">
-                  <Image
-                    src={caseStudy.image}
-                    alt={caseStudy.title}
-                    fill
-                    className="object-cover transform group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-4 left-4">
-                    <span className="text-white text-sm font-semibold">{caseStudy.category}</span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors duration-300">
-                    {caseStudy.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">{caseStudy.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-primary font-bold">{caseStudy.amount}</span>
-                    <Link
-                      href={caseStudy.details}
-                      className="text-accent hover:text-accent-dark font-semibold flex items-center gap-2"
-                    >
-                      Read Full Case
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
+                    <div className="flex justify-between items-center mt-6">
+                      {digest.amount && <span className="text-primary font-bold text-lg">{digest.amount}</span>}
+                      <Link href={digest.link} className="text-accent-teal flex items-center text-sm font-semibold">
+                        Read Full Case
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 ml-1">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                        </svg>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </AnimatedSection>
@@ -153,22 +101,23 @@ export default function CaseDigestPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="section-padding bg-primary text-white">
-        <div className="container-custom text-center">
-          <AnimatedSection>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Need Help With Your Claim?</h2>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <p className="text-xl mb-8 max-w-3xl mx-auto">
-              Don't let insurance companies deny your rightful claims. Let us help you fight for what you deserve.
+      {/* Call to Action (Optional) */}
+      <section className="py-20 bg-white">
+        <div className="container-custom">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-primary mb-6">
+              Have a case that needs reviewing?
+            </h2>
+            <p className="text-xl text-gray-700 mb-8">
+              Contact us today to discuss your insurance claim.
             </p>
-          </AnimatedSection>
-          <AnimatedSection delay={0.4}>
-            <Link href="/contact" className="btn-primary bg-white text-primary hover:bg-gray-100">
-              Get Started Today
-            </Link>
-          </AnimatedSection>
+            <a
+              href="/contact"
+              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-300"
+            >
+              Get in Touch
+            </a>
+          </div>
         </div>
       </section>
     </main>

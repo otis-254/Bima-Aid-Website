@@ -5,13 +5,10 @@ import Image from 'next/image'
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon, MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from '@heroicons/react/24/outline'
 
 interface ImageCarouselProps {
-  images: {
-    src: string
-    alt: string
-  }[]
+  images: string[]
 }
 
-export const ImageCarousel = ({ images }: ImageCarouselProps) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [direction, setDirection] = useState<'left' | 'right'>('right')
@@ -22,6 +19,10 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const minZoom = 1
+  const maxZoom = 3
+  const zoomStep = 0.2
 
   // Minimum swipe distance (in px)
   const minSwipeDistance = 50
@@ -67,10 +68,10 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
     const isRightSwipe = distance < -minSwipeDistance
 
     if (isLeftSwipe) {
-      nextSlide()
+      nextImage()
     }
     if (isRightSwipe) {
-      prevSlide()
+      prevImage()
     }
   }
 
@@ -111,7 +112,7 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
     setPosition({ x: 0, y: 0 })
   }
 
-  const nextSlide = useCallback(() => {
+  const nextImage = () => {
     if (isTransitioning) return
     setIsTransitioning(true)
     setDirection('right')
@@ -119,10 +120,11 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     )
     resetZoom()
+    setZoomLevel(1)
     setTimeout(() => setIsTransitioning(false), 500)
-  }, [images.length, isTransitioning])
+  }
 
-  const prevSlide = useCallback(() => {
+  const prevImage = () => {
     if (isTransitioning) return
     setIsTransitioning(true)
     setDirection('left')
@@ -130,17 +132,18 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     )
     resetZoom()
+    setZoomLevel(1)
     setTimeout(() => setIsTransitioning(false), 500)
-  }, [isTransitioning])
+  }
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (isFullScreen) {
       switch (e.key) {
         case 'ArrowLeft':
-          prevSlide()
+          prevImage()
           break
         case 'ArrowRight':
-          nextSlide()
+          nextImage()
           break
         case 'Escape':
           setIsFullScreen(false)
@@ -148,7 +151,7 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
           break
       }
     }
-  }, [isFullScreen, nextSlide, prevSlide])
+  }, [isFullScreen, nextImage, prevImage])
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
@@ -160,80 +163,79 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
     resetZoom()
   }
 
+  const zoomIn = () => {
+    setZoomLevel((prevZoom) => Math.min(prevZoom + zoomStep, maxZoom))
+  }
+
+  const zoomOut = () => {
+    setZoomLevel((prevZoom) => Math.max(prevZoom - zoomStep, minZoom))
+  }
+
+  if (!images || images.length === 0) {
+    return null
+  }
+
   return (
     <>
-      <div className="relative w-full h-[500px] rounded-xl overflow-hidden group">
-        {/* Main Image */}
-        <div 
-          className="relative w-full h-full cursor-pointer"
-          onClick={toggleFullScreen}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+      <div className="relative w-full aspect-video mx-auto overflow-hidden rounded-lg shadow-xl">
+        {/* Image Container with Zoom */}
+        <div
+          className="absolute inset-0 transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `scale(${zoomLevel})`,
+            transformOrigin: 'center center', // Zoom from the center
+          }}
         >
-          <div className="relative w-full h-full">
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                  index === currentIndex 
-                    ? 'translate-x-0 opacity-100' 
-                    : index < currentIndex 
-                      ? '-translate-x-full opacity-0' 
-                      : 'translate-x-full opacity-0'
-                }`}
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover"
-                  priority={index === currentIndex}
-                />
-              </div>
-            ))}
-          </div>
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <Image
+            src={images[currentIndex]}
+            alt={`Case Image ${currentIndex + 1}`}
+            fill
+            className="object-contain"
+          />
         </div>
 
         {/* Navigation Buttons */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100"
-          aria-label="Previous image"
-        >
-          <ChevronLeftIcon className="w-6 h-6" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100"
-          aria-label="Next image"
-        >
-          <ChevronRightIcon className="w-6 h-6" />
-        </button>
-
-        {/* Indicators */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                if (isTransitioning) return
-                setDirection(index > currentIndex ? 'right' : 'left')
-                setCurrentIndex(index)
-              }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex ? 'bg-white w-4' : 'bg-white/50'
-              }`}
-              aria-label={`Go to image ${index + 1}`}
-            />
-          ))}
+        <div className="absolute inset-y-0 left-0 flex items-center px-4">
+          <button
+            onClick={prevImage}
+            className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+        </div>
+        <div className="absolute inset-y-0 right-0 flex items-center px-4">
+          <button
+            onClick={nextImage}
+            className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
         </div>
 
-        {/* Image Counter */}
-        <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-          {currentIndex + 1} / {images.length}
+        {/* Zoom Controls */}
+        <div className="absolute bottom-4 right-4 flex space-x-2 z-10">
+          <button
+            onClick={zoomIn}
+            disabled={zoomLevel >= maxZoom}
+            className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+          <button
+            onClick={zoomOut}
+            disabled={zoomLevel <= minZoom}
+            className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -254,24 +256,6 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
           >
             <XMarkIcon className="w-8 h-8" />
           </button>
-
-          {/* Zoom Controls */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 rounded-full p-2">
-            <button
-              onClick={() => setScale(Math.max(1, scale - 0.5))}
-              className="text-white hover:text-gray-300 transition-colors duration-300 p-2"
-              aria-label="Zoom out"
-            >
-              <MagnifyingGlassMinusIcon className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => setScale(Math.min(4, scale + 0.5))}
-              className="text-white hover:text-gray-300 transition-colors duration-300 p-2"
-              aria-label="Zoom in"
-            >
-              <MagnifyingGlassPlusIcon className="w-6 h-6" />
-            </button>
-          </div>
 
           {/* Full Screen Image */}
           <div 
@@ -299,38 +283,18 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 }}
               >
                 <Image
-                  src={image.src}
-                  alt={image.alt}
+                  src={image}
+                  alt={`Case Image ${index + 1}`}
                   fill
                   className="object-contain"
-                  priority={index === currentIndex}
                 />
               </div>
             ))}
-          </div>
-
-          {/* Full Screen Navigation */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
-            aria-label="Previous image"
-          >
-            <ChevronLeftIcon className="w-8 h-8" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
-            aria-label="Next image"
-          >
-            <ChevronRightIcon className="w-8 h-8" />
-          </button>
-
-          {/* Full Screen Image Counter */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-lg">
-            {currentIndex + 1} / {images.length}
           </div>
         </div>
       )}
     </>
   )
-} 
+}
+
+export default ImageCarousel 
